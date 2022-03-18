@@ -17,11 +17,11 @@ setup(
         "Operating System :: OS Independent",
     ],
     name='sklearn_linear_model_modification',
-    version='0.0.3',
+    version='0.0.4',
     description='Wraps sklearn linear_model regression functions to allow Drop1, Add1, and VIF calculations',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    py_modules=['linear_model'],
+    py_modules=['sklearn_linear_model_modification'],
     package_dir={'': 'src'},
     install_requires = [
         "numpy>=1.16.1",

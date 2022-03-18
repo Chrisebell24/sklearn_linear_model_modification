@@ -15,10 +15,10 @@ pip install sklearn_linear_model_modification
 
 ```
 import pandas as pd
-from sklearn_linear_model_modification.linear_model import LinearRegression, Add1LinearRegression, Drop1LinearRegression
-from sklearn_linear_model_modification.linear_model import Lasso, Add1Lasso, Drop1Lasso
-from sklearn_linear_model_modification.linear_model import ElasticNet, Add1ElasticNet, Drop1ElasticNet
-from sklearn_linear_model_modification.linear_model import Ridge, Add1Ridge, Drop1Ridge
+from sklearn_linear_model_modification import LinearRegression, Add1LinearRegression, Drop1LinearRegression
+from sklearn_linear_model_modification import Lasso, Add1Lasso, Drop1Lasso
+from sklearn_linear_model_modification import ElasticNet, Add1ElasticNet, Drop1ElasticNet
+from sklearn_linear_model_modification import Ridge, Add1Ridge, Drop1Ridge
 
 def load_Xy():
     data = load_boston()
