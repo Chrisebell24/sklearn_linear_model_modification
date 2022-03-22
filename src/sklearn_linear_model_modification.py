@@ -45,6 +45,9 @@ class LinearRegression(_LinearRegression):
         self.num_params = len(self.coef_) + 1
         self.aic = n * log(self.mse) + 2 * self.num_params
 
+    def predict(self, X):
+        super().predict(X[self.X.columns.tolist()])
+
     def fit(self, X, y):
         super().fit(X, y)
         self._calculate_aic(X, y)
@@ -64,6 +67,9 @@ class ElasticNet(_ElasticNet):
         self.num_params = len(self.coef_) + 1
         self.aic = n * log(self.mse) + 2 * self.num_params
 
+    def predict(self, X):
+        super().predict(X[self.X.columns.tolist()])
+
     def fit(self, X, y):
         super().fit(X, y)
         self._calculate_aic(X, y)
@@ -82,6 +88,9 @@ class Ridge(_Ridge):
         self.mse = mean_squared_error(y, yhat)
         self.num_params = len(self.coef_) + 1
         self.aic = n * log(self.mse) + 2 * self.num_params
+
+    def predict(self, X):
+        super().predict(X[self.X.columns.tolist()])
 
     def fit(self, X, y):
         super().fit(X, y)
@@ -103,6 +112,9 @@ class Lasso(_Lasso):
         self.num_params = len(self.coef_) + 1
         self.aic = n * log(self.mse) + 2 * self.num_params
 
+    def predict(self, X):
+        super().predict(X[self.X.columns.tolist()])
+
     def fit(self, X, y):
         super().fit(X, y)
         self._calculate_aic(X, y)
@@ -121,6 +133,8 @@ class Add1LinearRegression(_LinearRegression):
         self.num_params = len(self.coef_) + 1
         self.aic = n * log(self.mse) + 2 * self.num_params
 
+    def predict(self, X):
+        super().predict(X[self.X.columns.tolist()])
 
     def fit(self, X, y):
 
@@ -186,6 +200,8 @@ class Add1ElasticNet(_ElasticNet):
         self.num_params = len(self.coef_) + 1
         self.aic = n * log(self.mse) + 2 * self.num_params
 
+    def predict(self, X):
+        super().predict(X[self.X.columns.tolist()])
 
     def fit(self, X, y):
 
@@ -251,6 +267,8 @@ class Add1Ridge(_Ridge):
         self.num_params = len(self.coef_) + 1
         self.aic = n * log(self.mse) + 2 * self.num_params
 
+    def predict(self, X):
+        super().predict(X[self.X.columns.tolist()])
 
     def fit(self, X, y):
 
@@ -316,6 +334,8 @@ class Add1Lasso(_Lasso):
         self.num_params = len(self.coef_) + 1
         self.aic = n * log(self.mse) + 2 * self.num_params
 
+    def predict(self, X):
+        super().predict(X[self.X.columns.tolist()])
 
     def fit(self, X, y):
 
@@ -394,6 +414,8 @@ class Drop1ElasticNet(_ElasticNet):
         self.num_params = len(self.coef_) + 1
         self.aic = n * log(self.mse) + 2 * self.num_params
 
+    def predict(self, X):
+        super().predict(X[self.X.columns.tolist()])
 
     def fit(self, X, y):
 
@@ -439,6 +461,8 @@ class Drop1LinearRegression(_LinearRegression):
         self.num_params = len(self.coef_) + 1
         self.aic = n * log(self.mse) + 2 * self.num_params
 
+    def predict(self, X):
+        super().predict(X[self.X.columns.tolist()])
 
     def fit(self, X, y):
 
@@ -484,6 +508,8 @@ class Drop1Lasso(_Lasso):
         self.num_params = len(self.coef_) + 1
         self.aic = n * log(self.mse) + 2 * self.num_params
 
+    def predict(self, X):
+        super().predict(X[self.X.columns.tolist()])
 
     def fit(self, X, y):
 
@@ -529,7 +555,9 @@ class Drop1Ridge(_Ridge):
         self.num_params = len(self.coef_) + 1
         self.aic = n * log(self.mse) + 2 * self.num_params
 
-
+    def predict(self, X):
+        super().predict(X[self.X.columns.tolist()])
+        
     def fit(self, X, y):
 
         super().fit(X, y)
