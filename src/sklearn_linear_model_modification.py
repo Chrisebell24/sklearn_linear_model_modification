@@ -18,18 +18,21 @@ def vif(X):
     are sometimes regarded as being moderate to high, with
     values of 10 or more being regarded as very high.
     '''
+    try:
+        if not isinstance(X, pd.DataFrame):
+            X = pd.DataFrame()
 
-    if not isinstance(X, pd.DataFrame):
-        X = pd.DataFrame()
+        vif_data = pd.DataFrame()
+        vif_data["feature"] = X.columns
+        vif_data["VIF"] = [variance_inflation_factor(X.values, i)
+                              for i in range(len(X.columns))]
 
-    vif_data = pd.DataFrame()
-    vif_data["feature"] = X.columns
-    vif_data["VIF"] = [variance_inflation_factor(X.values, i)
-                          for i in range(len(X.columns))]
+        vif_data.loc[ vif_data['VIF'] <= 4, 'record'] = "low"
+        vif_data.loc[ (vif_data['VIF'] > 4)&(vif_data['VIF'] < 10), 'record'] = "moderate"
+        vif_data.loc[ vif_data['VIF'] >= 10, 'record'] = "high"
+    except:
+        vif_data = pd.DataFrame()
 
-    vif_data.loc[ vif_data['VIF'] <= 4, 'record'] = "low"
-    vif_data.loc[ (vif_data['VIF'] > 4)&(vif_data['VIF'] < 10), 'record'] = "moderate"
-    vif_data.loc[ vif_data['VIF'] >= 10, 'record'] = "high"
     return vif_data
 
 class LinearRegression(_LinearRegression):
@@ -46,7 +49,7 @@ class LinearRegression(_LinearRegression):
         self.aic = n * log(self.mse) + 2 * self.num_params
 
     def predict(self, X):
-        super().predict(X[self.X.columns.tolist()])
+        return super().predict(X[self.X.columns.tolist()])
 
     def fit(self, X, y):
         super().fit(X, y)
@@ -68,7 +71,7 @@ class ElasticNet(_ElasticNet):
         self.aic = n * log(self.mse) + 2 * self.num_params
 
     def predict(self, X):
-        super().predict(X[self.X.columns.tolist()])
+        return super().predict(X[self.X.columns.tolist()])
 
     def fit(self, X, y):
         super().fit(X, y)
@@ -90,7 +93,7 @@ class Ridge(_Ridge):
         self.aic = n * log(self.mse) + 2 * self.num_params
 
     def predict(self, X):
-        super().predict(X[self.X.columns.tolist()])
+        return super().predict(X[self.X.columns.tolist()])
 
     def fit(self, X, y):
         super().fit(X, y)
@@ -113,7 +116,7 @@ class Lasso(_Lasso):
         self.aic = n * log(self.mse) + 2 * self.num_params
 
     def predict(self, X):
-        super().predict(X[self.X.columns.tolist()])
+        return super().predict(X[self.X.columns.tolist()])
 
     def fit(self, X, y):
         super().fit(X, y)
@@ -134,7 +137,7 @@ class Add1LinearRegression(_LinearRegression):
         self.aic = n * log(self.mse) + 2 * self.num_params
 
     def predict(self, X):
-        super().predict(X[self.X.columns.tolist()])
+        return super().predict(X[self.X.columns.tolist()])
 
     def fit(self, X, y):
 
@@ -201,7 +204,7 @@ class Add1ElasticNet(_ElasticNet):
         self.aic = n * log(self.mse) + 2 * self.num_params
 
     def predict(self, X):
-        super().predict(X[self.X.columns.tolist()])
+        return super().predict(X[self.X.columns.tolist()])
 
     def fit(self, X, y):
 
@@ -268,7 +271,7 @@ class Add1Ridge(_Ridge):
         self.aic = n * log(self.mse) + 2 * self.num_params
 
     def predict(self, X):
-        super().predict(X[self.X.columns.tolist()])
+        return super().predict(X[self.X.columns.tolist()])
 
     def fit(self, X, y):
 
@@ -335,7 +338,7 @@ class Add1Lasso(_Lasso):
         self.aic = n * log(self.mse) + 2 * self.num_params
 
     def predict(self, X):
-        super().predict(X[self.X.columns.tolist()])
+        return super().predict(X[self.X.columns.tolist()])
 
     def fit(self, X, y):
 
@@ -415,7 +418,7 @@ class Drop1ElasticNet(_ElasticNet):
         self.aic = n * log(self.mse) + 2 * self.num_params
 
     def predict(self, X):
-        super().predict(X[self.X.columns.tolist()])
+        return super().predict(X[self.X.columns.tolist()])
 
     def fit(self, X, y):
 
@@ -462,7 +465,7 @@ class Drop1LinearRegression(_LinearRegression):
         self.aic = n * log(self.mse) + 2 * self.num_params
 
     def predict(self, X):
-        super().predict(X[self.X.columns.tolist()])
+        return super().predict(X[self.X.columns.tolist()])
 
     def fit(self, X, y):
 
@@ -509,7 +512,7 @@ class Drop1Lasso(_Lasso):
         self.aic = n * log(self.mse) + 2 * self.num_params
 
     def predict(self, X):
-        super().predict(X[self.X.columns.tolist()])
+        return super().predict(X[self.X.columns.tolist()])
 
     def fit(self, X, y):
 
@@ -556,8 +559,8 @@ class Drop1Ridge(_Ridge):
         self.aic = n * log(self.mse) + 2 * self.num_params
 
     def predict(self, X):
-        super().predict(X[self.X.columns.tolist()])
-        
+        return super().predict(X[self.X.columns.tolist()])
+
     def fit(self, X, y):
 
         super().fit(X, y)
