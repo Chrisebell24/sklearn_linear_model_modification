@@ -17,7 +17,7 @@ setup(
         "Operating System :: OS Independent",
     ],
     name='sklearn_linear_model_modification',
-    version='0.0.6',
+    version='0.0.7',
     description='Wraps sklearn linear_model regression functions to allow Drop1, Add1, and VIF calculations',
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -26,8 +26,9 @@ setup(
     install_requires = [
         "numpy>=1.16.1",
         "pandas>=1.0.0",
-        "scikit-learn>=0.20.0",
+        "scikit-learn>=0.24.0",
         "statsmodels>=0.12.0",
+        "scipy>=1.3.0",
     ],
     extras_require = {
         "dev": [

@@ -58,8 +58,8 @@ def test_add1():
         lmod.predict(X)
 
         assert True
-    except:
-        assert False
+    except Exception as e:
+        assert False, e
 
 def test_drop1():
     X, y = load_Xy()
