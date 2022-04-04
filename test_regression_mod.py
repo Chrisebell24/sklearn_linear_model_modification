@@ -17,69 +17,74 @@ def load_Xy():
 def test_mod():
     X, y = load_Xy()
 
-    try:
-        lmod = Ridge()
-        lmod.fit(X, y)
-        lmod.predict(X)
+    lmod = Ridge()
+    lmod.fit(X, y)
+    lmod.predict(X)
 
-        lmod = Lasso()
-        lmod.fit(X, y)
-        lmod.predict(X)
+    lmod = Lasso()
+    lmod.fit(X, y)
+    lmod.predict(X)
 
-        lmod = ElasticNet()
-        lmod.fit(X, y)
-        lmod.predict(X)
+    lmod = ElasticNet()
+    lmod.fit(X, y)
+    lmod.predict(X)
 
-        lmod = LinearRegression()
-        lmod.fit(X, y)
-        lmod.predict(X)
-        assert True
-    except:
-        assert False
+    lmod = LinearRegression()
+    lmod.fit(X, y)
+    lmod.predict(X)
+
+    lmod = NonNegativeLeastSquares()
+    lmod.fit(X, y)
+    lmod.predict(X)
+    assert True
+
 
 def test_add1():
     X, y = load_Xy()
 
-    try:
-        lmod = Add1Ridge()
-        lmod.fit(X, y)
-        lmod.predict(X)
 
-        lmod = Add1Lasso()
-        lmod.fit(X, y)
-        lmod.predict(X)
+    lmod = Add1Ridge()
+    lmod.fit(X, y)
+    lmod.predict(X)
+    print(type(lmod.coef_))
+    
+    lmod = Add1Lasso()
+    lmod.fit(X, y)
+    lmod.predict(X)
 
-        lmod = Add1ElasticNet()
-        lmod.fit(X, y)
-        lmod.predict(X)
+    lmod = Add1ElasticNet()
+    lmod.fit(X, y)
+    lmod.predict(X)
 
-        lmod = Add1LinearRegression()
-        lmod.fit(X, y)
-        lmod.predict(X)
+    lmod = Add1LinearRegression()
+    lmod.fit(X, y)
+    lmod.predict(X)
 
-        assert True
-    except Exception as e:
-        assert False, e
+    lmod = Add1NonNegativeLeastSquares()
+    lmod.fit(X, y)
+    lmod.predict(X)
+    assert True
 
 def test_drop1():
     X, y = load_Xy()
 
-    try:
-        lmod = Drop1Ridge()
-        lmod.fit(X, y)
-        lmod.predict(X)
+    lmod = Drop1Ridge()
+    lmod.fit(X, y)
+    lmod.predict(X)
 
-        lmod = Drop1Lasso()
-        lmod.fit(X, y)
-        lmod.predict(X)
+    lmod = Drop1Lasso()
+    lmod.fit(X, y)
+    lmod.predict(X)
 
-        lmod = Drop1ElasticNet()
-        lmod.fit(X, y)
-        lmod.predict(X)
+    lmod = Drop1ElasticNet()
+    lmod.fit(X, y)
+    lmod.predict(X)
 
-        lmod = Drop1LinearRegression()
-        lmod.fit(X, y)
-        lmod.predict(X)
-        assert True
-    except:
-        assert False
+    lmod = Drop1LinearRegression()
+    lmod.fit(X, y)
+    lmod.predict(X)
+
+    lmod = Drop1NonNegativeLeastSquares()
+    lmod.fit(X, y)
+    lmod.predict(X)
+    assert True

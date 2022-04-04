@@ -50,18 +50,29 @@ def vif(X):
 class NonNegativeLeastSquares():
     def __init__(self):
         self.__doc__ = nnls.__doc__
-        self.max_iter=max_iter
 
-    def fit(self, X, y, max_iter=None):
+
+    def fit(self, X, y, drop_cols=True):
         nnls.__doc__
         X = _clean_X(X)
-        self.coefs_, cost = nnls(X, y, max_iter=max_iter)
-        self.X = X.iloc[:, self.coefs_>0 ]
-        self.coefs_= [i for i in self.coefs_ if i != 0 ]
+        self.coef_, cost = nnls(X, y)
+
+        if drop_cols:
+            self.X = X.iloc[:, self.coef_>0 ]
+        else:
+            self.X = X
+
+        self.num_params = self.X.shape[1]
+
+        if drop_cols:
+            # required for Drop1
+            self.coef_= [i for i in self.coef_ if i != 0 ]
+
+
         self.vif = vif(self.X)
 
     def predict(self, X):
-        return np.dot(X[self.X.columns], self.coefs_ )
+        return np.dot(X[self.X.columns], self.coef_ )
 
 class BoundedLinearRegression():
     def __init__(self):
@@ -73,15 +84,16 @@ class BoundedLinearRegression():
     ):
         lsq_linear.__doc__
         X = _clean_X(X)
-        self.coefs_, cost = lsq_linear(X, y, bounds=bounds, method=method,
+        self.coef_, cost = lsq_linear(X, y, bounds=bounds, method=method,
         tol=tol, lsq_solver=lsq_solver, lsmr_tol=lsmr_tol, max_iter=max_iter,
         verbose=verbose)
         self.X = X.iloc[:, self.coefs_!=0 ]
-        self.coefs_= [i for i in self.coefs_ if i != 0 ]
+        self.coef_= [i for i in self.coef_ if i != 0 ]
+        self.num_params = self.X.shape[1]
         self.vif = vif(self.X)
 
     def predict(self, X):
-        return np.dot(X[self.X.columns], self.coefs_ )
+        return np.dot(X[self.X.columns], self.coef_ )
 
 
 
@@ -177,6 +189,74 @@ class Lasso(_Lasso):
         super().fit(X, y, sample_weight=sample_weight, check_input=check_input)
         self._calculate_aic(X, y)
         self.X = X
+        self.vif = vif(self.X)
+
+class Add1NonNegativeLeastSquares(NonNegativeLeastSquares):
+    def __init__(self):
+        super().__init__()
+        self.__doc__ = super().__doc__
+
+    def _calculate_aic(self, X, y):
+        n = len(y)
+        yhat = super().predict(X)
+        self.mse = mean_squared_error(y, yhat)
+        self.num_params = len(self.coef_) + 1
+        self.aic = n * log(self.mse) + 2 * self.num_params
+
+    def predict(self, X):
+        super().predict.__doc__
+        return super().predict(X[self.X.columns.tolist()])
+
+    def fit(self, X, y, max_n=None):
+        super().fit.__doc__
+        super().fit(X, y, False)
+        self._calculate_aic(X, y)
+        self.X = X
+        current_index = []
+        aic_dict = {}
+
+        while True:
+
+            for i in range(0, X.shape[1] ):
+                if not i in current_index or current_index == []:
+                    new_index = current_index+[i]
+
+                    if isinstance(X, pd.DataFrame):
+                        newX = X.iloc[:, new_index ]
+                    else:
+                        newX = X[:, new_index ]
+
+                    super().fit(newX, y, False)
+                    self._calculate_aic(newX, y)
+
+
+                    aic_dict[ i ] = {'new_index': new_index, 'aic':self.aic, 'X': newX, 'model': super()}
+
+            best_label, best_dict = [
+                (k,v) for k, v in aic_dict.items()
+                if v['aic'] == min( [j['aic'] for j in aic_dict.values()] )
+            ][0]
+
+            self.aic = best_dict['aic']
+            self.X = best_dict['X']
+            new_index = best_dict['new_index']
+
+            super().fit(self.X, y, False)
+
+            if best_label =='current' or (max_n != None and self.X.shape[1] >= max_n):
+                break
+            else:
+                aic_dict = {}
+                aic_dict['current'] = {'aic':self.aic, 'new_index': new_index, 'X': self.X, 'model': super()}
+                current_index = new_index
+
+                if len(current_index)==X.shape[1]:
+
+                    super().fit(self.X, y, True)
+                    self.aic = best_dict['aic']
+                    self.X = best_dict['X']
+                    break
+
         self.vif = vif(self.X)
 
 class Add1LinearRegression(_LinearRegression):
@@ -457,12 +537,17 @@ def _drop_column_by_index(X, i):
     X : pd.DataFrame, numpy array
     i:number
     '''
-    if isinstance(X, pd.DataFrame):
-        X = X.drop(X.columns[i], axis=1).copy()
-    else:
-        X = np.delete(X, i, 1)
 
-    return X
+    if isinstance(X, pd.DataFrame):
+
+        col = X.columns[i]
+        new_X = X.loc[:, [i for i in X.columns if i != col ]]
+    else:
+        new_X = np.delete(X, i, 1)
+
+
+
+    return new_X
 
 
 class Drop1ElasticNet(_ElasticNet):
@@ -493,9 +578,9 @@ class Drop1ElasticNet(_ElasticNet):
 
             aic_dict = {}
             aic_dict['current'] = {'aic':self.aic, 'X': self.X, 'model': super()}
-
+            start_X = self.X.copy(deep=True)
             for i in range(0, self.num_params-1):
-                newX = _drop_column_by_index(self.X, i)
+                newX = _drop_column_by_index(start_X, i)
                 super().fit(newX, y)
                 self._calculate_aic(newX, y)
                 aic_dict[i] = {'aic':self.aic, 'X': newX, 'model': super() }
@@ -510,6 +595,56 @@ class Drop1ElasticNet(_ElasticNet):
             super().fit(self.X, y)
 
             if best_label =='current':
+                break
+
+        self.vif = vif(self.X)
+
+class Drop1NonNegativeLeastSquares(NonNegativeLeastSquares):
+    def __init__(self):
+        super().__init__()
+        self.__doc__ = super().__doc__
+
+    def _calculate_aic(self, X, y):
+        n = len(y)
+        yhat = super().predict(X)
+        self.mse = mean_squared_error(y, yhat)
+        self.num_params = len(self.coef_) + 1
+        self.aic = n * log(self.mse) + 2 * self.num_params
+
+    def predict(self, X):
+        super().predict.__doc__
+        return super().predict(X[self.X.columns.tolist()])
+
+    def fit(self, X, y):
+
+        super().fit(X, y, False)
+        self._calculate_aic(X, y)
+        self.X = X
+
+
+        while True:
+
+            aic_dict = {}
+            aic_dict['current'] = {'aic':self.aic, 'X': self.X, 'model': super()}
+
+            start_X = self.X.copy(deep=True)
+            for i in range(0, self.num_params-1):
+                newX = _drop_column_by_index(start_X, i)
+                super().fit(newX, y, False)
+                self._calculate_aic(newX, y)
+                aic_dict[i] = {'aic':self.aic, 'X': newX, 'model': super() }
+
+            best_label, best_dict = [
+                (k,v) for k, v in aic_dict.items()
+                if v['aic'] == min( [j['aic'] for j in aic_dict.values()] )
+            ][0]
+
+            self.aic = best_dict['aic']
+            self.X = best_dict['X']
+            super().fit(self.X, y, False)
+
+            if best_label =='current':
+                super().fit(self.X, y, True)
                 break
 
         self.vif = vif(self.X)
@@ -542,8 +677,9 @@ class Drop1LinearRegression(_LinearRegression):
             aic_dict = {}
             aic_dict['current'] = {'aic':self.aic, 'X': self.X, 'model': super()}
 
+            start_X = self.X.copy(deep=True)
             for i in range(0, self.num_params-1):
-                newX = _drop_column_by_index(self.X, i)
+                newX = _drop_column_by_index(start_X, i)
                 super().fit(newX, y, sample_weight=sample_weight)
                 self._calculate_aic(newX, y)
                 aic_dict[i] = {'aic':self.aic, 'X': newX, 'model': super() }
@@ -588,9 +724,9 @@ class Drop1Lasso(_Lasso):
 
             aic_dict = {}
             aic_dict['current'] = {'aic':self.aic, 'X': self.X, 'model': super()}
-
+            start_X = self.X.copy(deep=True)
             for i in range(0, self.num_params-1):
-                newX = _drop_column_by_index(self.X, i)
+                newX = _drop_column_by_index(start_X, i)
                 super().fit(newX, y)
                 self._calculate_aic(newX, y)
                 aic_dict[i] = {'aic':self.aic, 'X': newX, 'model': super() }
@@ -636,9 +772,9 @@ class Drop1Ridge(_Ridge):
 
             aic_dict = {}
             aic_dict['current'] = {'aic':self.aic, 'X': self.X, 'model': super()}
-
+            start_X = self.X.copy(deep=True)
             for i in range(0, self.num_params-1):
-                newX = _drop_column_by_index(self.X, i)
+                newX = _drop_column_by_index(start_X, i)
                 super().fit(newX, y, sample_weight=sample_weight)
                 self._calculate_aic(newX, y)
                 aic_dict[i] = {'aic':self.aic, 'X': newX, 'model': super() }
