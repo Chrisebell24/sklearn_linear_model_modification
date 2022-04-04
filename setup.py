@@ -17,7 +17,7 @@ setup(
         "Operating System :: OS Independent",
     ],
     name='sklearn_linear_model_modification',
-    version='0.0.9',
+    version='0.0.10',
     description='Wraps sklearn linear_model regression functions to allow Drop1, Add1, and VIF calculations',
     long_description=long_description,
     long_description_content_type="text/markdown",

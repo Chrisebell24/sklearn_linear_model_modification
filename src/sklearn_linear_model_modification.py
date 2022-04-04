@@ -100,7 +100,11 @@ class BoundedLinearRegression():
 class LinearRegression(_LinearRegression):
 
     def __init__(self, fit_intercept=True, normalize=False, copy_X=True, n_jobs=None, positive=False):
-        super().__init__(fit_intercept=fit_intercept, normalize=normalize, copy_X=copy_X, n_jobs=n_jobs, positive=positive)
+        try:
+            super().__init__(fit_intercept=fit_intercept, normalize=normalize, copy_X=copy_X, n_jobs=n_jobs, positive=positive)
+        except:
+            super().__init__(fit_intercept=fit_intercept, normalize=normalize, copy_X=copy_X, n_jobs=n_jobs)
+            
         self.__doc__ = super().__doc__
 
     def _calculate_aic(self, X, y):
@@ -124,7 +128,10 @@ class LinearRegression(_LinearRegression):
 class ElasticNet(_ElasticNet):
 
     def __init__(self, alpha=1.0, l1_ratio=0.5, fit_intercept=True, normalize=False, precompute=False, max_iter=1000, copy_X=True, tol=0.0001, warm_start=False, positive=False, random_state=None, selection='cyclic'):
-        super().__init__(alpha=alpha, l1_ratio=l1_ratio, fit_intercept=fit_intercept, normalize=normalize, precompute=precompute, max_iter=max_iter, copy_X=copy_X, tol=tol, warm_start=warm_start, positive=positive, random_state=random_state, selection=selection)
+        try:
+            super().__init__(alpha=alpha, l1_ratio=l1_ratio, fit_intercept=fit_intercept, normalize=normalize, precompute=precompute, max_iter=max_iter, copy_X=copy_X, tol=tol, warm_start=warm_start, positive=positive, random_state=random_state, selection=selection)
+        except:
+            super().__init__(alpha=alpha, l1_ratio=l1_ratio, fit_intercept=fit_intercept, normalize=normalize, precompute=precompute, max_iter=max_iter, copy_X=copy_X, tol=tol, warm_start=warm_start, random_state=random_state, selection=selection)
         self.__doc__ = super().__doc__
 
     def _calculate_aic(self, X, y):
@@ -171,8 +178,10 @@ class Ridge(_Ridge):
 class Lasso(_Lasso):
 
     def __init__(self, alpha=1.0, fit_intercept=True, normalize=False, precompute=False, copy_X=True, max_iter=1000, tol=0.0001, warm_start=False, positive=False, random_state=None, selection='cyclic'):
-        super().__init__(alpha=alpha, fit_intercept=fit_intercept, normalize=normalize, precompute=precompute, copy_X=copy_X, max_iter=max_iter, tol=tol, warm_start=warm_start, positive=positive, random_state=random_state, selection=selection
-)
+        try:
+            super().__init__(alpha=alpha, fit_intercept=fit_intercept, normalize=normalize, precompute=precompute, copy_X=copy_X, max_iter=max_iter, tol=tol, warm_start=warm_start, random_state=random_state, selection=selection, positive=positive)
+        except:
+            super().__init__(alpha=alpha, fit_intercept=fit_intercept, normalize=normalize, precompute=precompute, copy_X=copy_X, max_iter=max_iter, tol=tol, warm_start=warm_start, random_state=random_state, selection=selection)
         self.__doc__ = super().__doc__
 
     def _calculate_aic(self, X, y):
@@ -261,8 +270,11 @@ class Add1NonNegativeLeastSquares(NonNegativeLeastSquares):
 
 class Add1LinearRegression(_LinearRegression):
     def __init__(self, fit_intercept=True, normalize=False, copy_X=True, n_jobs=None, positive=False):
-        super().__init__(fit_intercept=fit_intercept, normalize=normalize, copy_X=copy_X, n_jobs=n_jobs, positive=positive
-)
+        try:
+            super().__init__(fit_intercept=fit_intercept, normalize=normalize, copy_X=copy_X, n_jobs=n_jobs, positive=positive)
+        except:
+            super().__init__(fit_intercept=fit_intercept, normalize=normalize, copy_X=copy_X, n_jobs=n_jobs)
+
         self.__doc__ = super().__doc__
 
     def _calculate_aic(self, X, y):
@@ -330,7 +342,11 @@ class Add1LinearRegression(_LinearRegression):
 
 class Add1ElasticNet(_ElasticNet):
     def __init__(self, alpha=1.0, l1_ratio=0.5, fit_intercept=True, normalize=False, precompute=False, max_iter=1000, copy_X=True, tol=0.0001, warm_start=False, positive=False, random_state=None, selection='cyclic'):
-        super().__init__(alpha=alpha, l1_ratio=l1_ratio, fit_intercept=fit_intercept, normalize=normalize, precompute=precompute, max_iter=max_iter, copy_X=copy_X, tol=tol, warm_start=warm_start, positive=positive, random_state=random_state, selection=selection)
+        try:
+            super().__init__(alpha=alpha, l1_ratio=l1_ratio, fit_intercept=fit_intercept, normalize=normalize, precompute=precompute, max_iter=max_iter, copy_X=copy_X, tol=tol, warm_start=warm_start, positive=positive, random_state=random_state, selection=selection)
+        except:
+            super().__init__(alpha=alpha, l1_ratio=l1_ratio, fit_intercept=fit_intercept, normalize=normalize, precompute=precompute, max_iter=max_iter, copy_X=copy_X, tol=tol, warm_start=warm_start, random_state=random_state, selection=selection)
+
         self.__doc__ = super().__doc__
 
     def _calculate_aic(self, X, y):
@@ -466,7 +482,10 @@ class Add1Ridge(_Ridge):
 
 class Add1Lasso(_Lasso):
     def __init__(self, alpha=1.0, fit_intercept=True, normalize=False, precompute=False, copy_X=True, max_iter=1000, tol=0.0001, warm_start=False, positive=False, random_state=None, selection='cyclic'):
-        super().__init__(alpha=alpha, fit_intercept=fit_intercept, normalize=normalize, precompute=precompute, copy_X=copy_X, max_iter=max_iter, tol=tol, warm_start=warm_start, positive=positive, random_state=random_state, selection=selection)
+        try:
+            super().__init__(alpha=alpha, fit_intercept=fit_intercept, normalize=normalize, precompute=precompute, copy_X=copy_X, max_iter=max_iter, tol=tol, warm_start=warm_start, positive=positive, random_state=random_state, selection=selection)
+        except:
+            super().__init__(alpha=alpha, fit_intercept=fit_intercept, normalize=normalize, precompute=precompute, copy_X=copy_X, max_iter=max_iter, tol=tol, warm_start=warm_start, random_state=random_state, selection=selection)
         self.__doc__ = super().__doc__
 
     def _calculate_aic(self, X, y):
@@ -553,7 +572,10 @@ def _drop_column_by_index(X, i):
 class Drop1ElasticNet(_ElasticNet):
 
     def __init__(self, alpha=1.0, l1_ratio=0.5, fit_intercept=True, normalize=False, precompute=False, max_iter=1000, copy_X=True, tol=0.0001, warm_start=False, positive=False, random_state=None, selection='cyclic'):
-        super().__init__(alpha=alpha, l1_ratio=l1_ratio, fit_intercept=fit_intercept, normalize=normalize, precompute=precompute, max_iter=max_iter, copy_X=copy_X, tol=tol, warm_start=warm_start, positive=positive, random_state=random_state, selection=selection)
+        try:
+            super().__init__(alpha=alpha, l1_ratio=l1_ratio, fit_intercept=fit_intercept, normalize=normalize, precompute=precompute, max_iter=max_iter, copy_X=copy_X, tol=tol, warm_start=warm_start, positive=positive, random_state=random_state, selection=selection)
+        except:
+            super().__init__(alpha=alpha, l1_ratio=l1_ratio, fit_intercept=fit_intercept, normalize=normalize, precompute=precompute, max_iter=max_iter, copy_X=copy_X, tol=tol, warm_start=warm_start, random_state=random_state, selection=selection)
         self.__doc__ = super().__doc__
 
 
@@ -651,7 +673,11 @@ class Drop1NonNegativeLeastSquares(NonNegativeLeastSquares):
 
 class Drop1LinearRegression(_LinearRegression):
     def __init__(self, fit_intercept=True, normalize=False, copy_X=True, n_jobs=None, positive=False):
-        super().__init__(fit_intercept=fit_intercept, normalize=normalize, copy_X=copy_X, n_jobs=n_jobs, positive=positive)
+        try:
+            super().__init__(fit_intercept=fit_intercept, normalize=normalize, copy_X=copy_X, n_jobs=n_jobs, positive=positive)
+        except:
+            super().__init__(fit_intercept=fit_intercept, normalize=normalize, copy_X=copy_X, n_jobs=n_jobs)
+
         self.__doc__ = super().__doc__
 
     def _calculate_aic(self, X, y):
@@ -700,7 +726,11 @@ class Drop1LinearRegression(_LinearRegression):
 
 class Drop1Lasso(_Lasso):
     def __init__(self, alpha=1.0, fit_intercept=True, normalize=False, precompute=False, copy_X=True, max_iter=1000, tol=0.0001, warm_start=False, positive=False, random_state=None, selection='cyclic'):
-        super().__init__(alpha=alpha, fit_intercept=fit_intercept, normalize=normalize, precompute=precompute, copy_X=copy_X, max_iter=max_iter, tol=tol, warm_start=warm_start, positive=positive, random_state=random_state, selection=selection)
+        try:
+            super().__init__(alpha=alpha, fit_intercept=fit_intercept, normalize=normalize, precompute=precompute, copy_X=copy_X, max_iter=max_iter, tol=tol, warm_start=warm_start, positive=positive, random_state=random_state, selection=selection)
+        except:
+            super().__init__(alpha=alpha, fit_intercept=fit_intercept, normalize=normalize, precompute=precompute, copy_X=copy_X, max_iter=max_iter, tol=tol, warm_start=warm_start, random_state=random_state, selection=selection)
+
         self.__doc__ = super().__doc__
 
     def _calculate_aic(self, X, y):
