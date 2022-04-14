@@ -104,7 +104,7 @@ class LinearRegression(_LinearRegression):
             super().__init__(fit_intercept=fit_intercept, normalize=normalize, copy_X=copy_X, n_jobs=n_jobs, positive=positive)
         except:
             super().__init__(fit_intercept=fit_intercept, normalize=normalize, copy_X=copy_X, n_jobs=n_jobs)
-            
+
         self.__doc__ = super().__doc__
 
     def _calculate_aic(self, X, y):
@@ -145,9 +145,9 @@ class ElasticNet(_ElasticNet):
         super().predict.__doc__
         return super().predict(X[self.X.columns.tolist()])
 
-    def fit(self, X, y, sample_weight=None, check_input=True):
+    def fit(self, X, y, check_input=True):
         super().fit.__doc__
-        super().fit(X, y, sample_weight=sample_weight, check_input=check_input)
+        super().fit(X, y, check_input=check_input)
         self._calculate_aic(X, y)
         self.X = X
         self.vif = vif(self.X)
@@ -194,8 +194,8 @@ class Lasso(_Lasso):
     def predict(self, X):
         return super().predict(X[self.X.columns.tolist()])
 
-    def fit(self, X, y, sample_weight=None, check_input=True):
-        super().fit(X, y, sample_weight=sample_weight, check_input=check_input)
+    def fit(self, X, y, check_input=True):
+        super().fit(X, y, check_input=check_input)
         self._calculate_aic(X, y)
         self.X = X
         self.vif = vif(self.X)
@@ -360,9 +360,9 @@ class Add1ElasticNet(_ElasticNet):
         super().predict.__doc__
         return super().predict(X[self.X.columns.tolist()])
 
-    def fit(self, X, y, max_n=None, sample_weight=None, check_input=True):
+    def fit(self, X, y, max_n=None, check_input=True):
         super().fit.__doc__
-        super().fit(X, y, sample_weight=sample_weight, check_input=check_input)
+        super().fit(X, y, check_input=check_input)
         self._calculate_aic(X, y)
         self.X = X
         current_index = []
@@ -379,7 +379,7 @@ class Add1ElasticNet(_ElasticNet):
                     else:
                         newX = X[:, new_index ]
 
-                    super().fit(newX, y, sample_weight=sample_weight, check_input=check_input)
+                    super().fit(newX, y, check_input=check_input)
                     self._calculate_aic(newX, y)
 
 
@@ -394,7 +394,7 @@ class Add1ElasticNet(_ElasticNet):
             self.X = best_dict['X']
             new_index = best_dict['new_index']
 
-            super().fit(self.X, y, sample_weight=sample_weight, check_input=check_input)
+            super().fit(self.X, y, check_input=check_input)
 
             if best_label =='current' or (max_n != None and self.X.shape[1] >= max_n):
                 break
@@ -405,7 +405,7 @@ class Add1ElasticNet(_ElasticNet):
 
                 if len(current_index)==X.shape[1]:
 
-                    super().fit(self.X, y, sample_weight=sample_weight, check_input=check_input)
+                    super().fit(self.X, y, check_input=check_input)
                     self.aic = best_dict['aic']
                     self.X = best_dict['X']
                     break
@@ -499,9 +499,9 @@ class Add1Lasso(_Lasso):
         super().predict.__doc__
         return super().predict(X[self.X.columns.tolist()])
 
-    def fit(self, X, y, max_n=None, sample_weight=None, check_input=True):
+    def fit(self, X, y, max_n=None, check_input=True):
         super().fit.__doc__
-        super().fit(X, y, sample_weight=sample_weight, check_input=check_input)
+        super().fit(X, y, check_input=check_input)
         self._calculate_aic(X, y)
         self.X = X
         current_index = []
@@ -533,7 +533,7 @@ class Add1Lasso(_Lasso):
             self.X = best_dict['X']
             new_index = best_dict['new_index']
 
-            super().fit(self.X, y, sample_weight=sample_weight, check_input=check_input)
+            super().fit(self.X, y, check_input=check_input)
 
             if best_label =='current' or (max_n != None and self.X.shape[1] >= max_n):
                 break
@@ -590,9 +590,9 @@ class Drop1ElasticNet(_ElasticNet):
         super().predict.__doc__
         return super().predict(X[self.X.columns.tolist()])
 
-    def fit(self, X, y, sample_weight=None, check_input=True):
+    def fit(self, X, y, check_input=True):
         super().fit.__doc__
-        super().fit(X, y, sample_weight=sample_weight, check_input=check_input)
+        super().fit(X, y, check_input=check_input)
         self._calculate_aic(X, y)
         self.X = X
 
@@ -744,9 +744,9 @@ class Drop1Lasso(_Lasso):
         super().predict.__doc__
         return super().predict(X[self.X.columns.tolist()])
 
-    def fit(self, X, y, sample_weight=None, check_input=True):
+    def fit(self, X, y, check_input=True):
         super().fit.__doc__
-        super().fit(X, y, sample_weight=sample_weight, check_input=check_input)
+        super().fit(X, y, check_input=check_input)
         self._calculate_aic(X, y)
         self.X = X
 
